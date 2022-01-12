@@ -35,6 +35,7 @@ module Lecture1
 its behaviour, possible types for the function arguments and write the
 type signature explicitly.
 -}
+makeSnippet :: Int -> String -> String
 makeSnippet limit text = take limit ("Description: " ++ text) ++ "..."
 
 {- | Implement a function that takes two numbers and finds sum of
@@ -50,7 +51,8 @@ Explanation: @sumOfSquares 3 4@ should be equal to @9 + 16@ and this
 is 25.
 -}
 -- DON'T FORGET TO SPECIFY THE TYPE IN HERE
-sumOfSquares x y = error "TODO!"
+sumOfSquares :: Integer -> Integer -> Integer
+sumOfSquares x y = x^2 + y^2
 
 {- | Implement a function that returns the last digit of a given number.
 
@@ -63,7 +65,8 @@ sumOfSquares x y = error "TODO!"
 
 -}
 -- DON'T FORGET TO SPECIFY THE TYPE IN HERE
-lastDigit n = error "lastDigit: Not implemented!"
+lastDigit :: Integer -> Integer
+lastDigit = (`mod` 10) . abs
 
 {- | Write a function that takes three numbers and returns the
 difference between the biggest number and the smallest one.
@@ -77,7 +80,11 @@ and 1 is the smallest, and 7 - 1 = 6.
 Try to use local variables (either let-in or where) to implement this
 function.
 -}
-minmax x y z = error "TODO"
+minmax :: (Num a, Ord a) => a -> a -> a -> a
+minmax x y z = a - b
+    where
+        a = x `max` y `max` z
+        b = x `min` y `min` z
 
 {- | Implement a function that takes a string, start and end positions
 and returns a substring of a given string from the start position to
@@ -94,7 +101,10 @@ start position can be considered as zero (e.g. substring from the
 first character) and negative end position should result in an empty
 string.
 -}
-subString start end str = error "TODO"
+subString :: Int -> Int -> String -> String
+subString _     end _   | end   < 0  = []
+subString start end str | start < 0  = take (end + 1) str
+subString start end str              = take (end - start + 1) $ drop start str
 
 {- | Write a function that takes a String — space separated numbers,
 and finds a sum of the numbers inside this string.
@@ -104,14 +114,15 @@ and finds a sum of the numbers inside this string.
 
 The string contains only spaces and/or numbers.
 -}
-strSum str = error "TODO"
+strSum :: String -> Integer
+strSum = sum . map read . words
 
 {- | Write a function that takes a number and a list of numbers and
 returns a string, saying how many elements of the list are strictly
 greated than the given number and strictly lower.
 
 >>> lowerAndGreater 3 [1 .. 9]
-"3 is greater than 2 elements and lower than 6 elements"
+"3 is greater than 6 elements and lower than 2 elements"
 
 Explanation: the list [1 .. 9] contains 9 elements: [1, 2, 3, 4, 5, 6, 7, 8, 9]
 The given number 3 is greater than 2 elements (1 and 2)
@@ -119,4 +130,16 @@ and lower than 6 elements (4, 5, 6, 7, 8 and 9).
 
 🕯 HINT: Use recursion to implement this function.
 -}
-lowerAndGreater n list = error "TODO"
+lowerAndGreater :: (Show a, Ord a) => a -> [a] -> String
+lowerAndGreater n list =
+    show n ++ " is greater than " ++
+    show a ++ " elements and lower than " ++
+    show b ++ " elements"
+        where
+            go []     acc = acc
+            go (x:xs) acc =
+                ( if x > n then a' + 1 else a',
+                  if x < n then b' + 1 else b'
+                ) where
+                    (a',b') = go xs acc
+            (a, b) = go list (0,0) :: (Int, Int)
