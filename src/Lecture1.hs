@@ -122,7 +122,7 @@ returns a string, saying how many elements of the list are strictly
 greated than the given number and strictly lower.
 
 >>> lowerAndGreater 3 [1 .. 9]
-"3 is greater than 6 elements and lower than 2 elements"
+"3 is greater than 2 elements and lower than 6 elements"
 
 Explanation: the list [1 .. 9] contains 9 elements: [1, 2, 3, 4, 5, 6, 7, 8, 9]
 The given number 3 is greater than 2 elements (1 and 2)
@@ -138,8 +138,8 @@ lowerAndGreater n list =
         where
             go []     acc = acc
             go (x:xs) acc =
-                ( if x > n then a' + 1 else a',
-                  if x < n then b' + 1 else b'
+                ( if x < n then a' + 1 else a',
+                  if x > n then b' + 1 else b'
                 ) where
                     (a',b') = go xs acc
             (a, b) = go list (0,0) :: (Int, Int)
